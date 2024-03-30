@@ -1,0 +1,70 @@
+#root {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+}
+  
+.logo {
+    height: 6em;
+    padding: 1em;
+    will-change: filter;
+    transition: filter 300ms;
+}
+.logo:hover {
+    filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+    filter: drop-shadow(0 0 2em #61dafbaa);
+}
+  
+.card {
+    display: flex;
+    flex-direction: column;
+    padding: 2em;
+    background-color: #474747;
+    border-radius: 20px;
+    align-items: center;
+    position: relative;
+}
+
+.otp-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 2em;
+    border-radius: 20px;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+}
+
+.card-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #7c7c7c;
+    border-radius: 20px 20px 0px 0px;
+}
+
+.input-field-otp {
+    border: 3px solid #1C975B;
+    display: flex;
+    padding: 1em;
+    margin: 1em;
+    margin-top: 0.1em;
+    width: 2em;
+    height: 2em;
+    border-radius: 10px;
+    text-align: center;
+}
+.input-field-otp:focus {
+    outline: none;
+}
+  
+.auth-btn {
+    flex: 0 0 8em;
+    margin-top: 0.5em;
+    justify-content: center;
+}

@@ -23,10 +23,7 @@ function Register() {
         </div>
         <input name="username" className="input-field-login" placeholder="Username"/>
         <input name="password" className="input-field-password" placeholder="Password"/>
-        <div className="forgot-pw-separator-1"></div>
-        <button className="forgot-btn">Forgot your password?</button>
-        <div className="forgot-pw-separator-2"></div>
-        <button className="auth-btn">Login</button>
+        <button className="auth-btn">Register</button>
       </div>
     </>
   )
