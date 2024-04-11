@@ -46,14 +46,13 @@ function UserProvider({ children }) {
 
             if (data.success) {
                 setUserState({isLoggedIn: true, username: email})
-                return true
             } else {
                 console.error(data.message)
-                return false
+                throw new Error(data.message)
             }
         } catch (error) {
             console.error(error)
-            return false
+            throw error
         }
     }
 

@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './Login';
-import Register from './Register';
-import OTP from './otp';
+import Login from './components/Login';
+import Register from './components/Register';
+import OTP from './components/otp';
 
 function App() {
     return (

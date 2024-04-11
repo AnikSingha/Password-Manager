@@ -1,5 +1,3 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './otp.css'
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
@@ -39,11 +37,6 @@ function OTP() {
   
   return (
     <>
-      <div>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
       <h1>Password Manager</h1>
       <div className="card">
         <h2>Enter OTP</h2>
