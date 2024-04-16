@@ -23,31 +23,32 @@ async function makeRequest(url, method, body) {
 
 function UserProvider({ children }) {
 
-    let [state, setState] = useState({isLoggedIn: false, username: ""})
-
-    const setUserState = ({ isLoggedIn, username }) => {
-        localStorage.setItem("isLoggedIn", isLoggedIn ? "true" : "false");
-        localStorage.setItem("username", username);
-        setState({ isLoggedIn, username });
-    };
+    let [user, setUser] = useState("")
+    let [sessionId, setSessionId] = useState("")
 
     useEffect(() => {
-        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true"
-        const username = localStorage.getItem('username') || ""
-
-        if (isLoggedIn) { 
-            setUserState({isLoggedIn, username})
-        }
-    }, [])
+        const fetchData = async () => {
+            try {
+                const response = await makeRequest('http://localhost:5000/auth/get_cookies', 'GET');
+    
+                if (response.success) {
+                    setUser(response.user);
+                    setSessionId(response.session_id);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+    
+        fetchData();
+    }, [document.cookie, user, sessionId])
 
     const login = async (email, password) => {
 
         try {
-            const data = await makeRequest('https://pass.aniksingha.com/auth/login', 'POST', { email, password })
+            const data = await makeRequest('http://localhost:5000/auth/login', 'POST', { email, password })
 
             if (data.success) {
-                console.log("check cookies")
-                console.log(document.cookie)
             } else {
                 throw new Error(data.message)
             }
@@ -58,7 +59,7 @@ function UserProvider({ children }) {
 
     const register = async (email, password) => {
         try {
-            const data = await makeRequest('https://pass.aniksingha.com/auth/register', 'POST', { email, password })
+            const data = await makeRequest('http://localhost:5000/auth/register', 'POST', { email, password })
 
             if (data.success) {
                 return true
@@ -74,7 +75,7 @@ function UserProvider({ children }) {
 
     const resetPassword = async (email, password) => {
         try {
-            const data = await makeRequest('https://pass.aniksingha.com/auth/reset_password', 'POST', { email, password })
+            const data = await makeRequest('http://localhost:5000/auth/reset_password', 'POST', { email, password })
 
             if (data.success) {
                 return true
@@ -88,14 +89,20 @@ function UserProvider({ children }) {
         }
     }
 
-    const logout = () => {
-        setUserState({isLoggedIn: false, username: ""})
-        localStorage.removeItem('isLoggedIn')
-        localStorage.removeItem('username')
+    const logout = async () => {
+
+        try {
+            const data = await makeRequest('http://localhost:5000/delete_cookies')
+        } catch(error) {
+            console.log(error)
+        }
+
+        setUser('')
+        setSessionId('')
     }
 
     return (
-        <UserContext.Provider value={{ state, login, register, resetPassword, logout}}>
+        <UserContext.Provider value={{ user, sessionId, login, register, resetPassword, logout}}>
             {children}
         </UserContext.Provider>
     )
