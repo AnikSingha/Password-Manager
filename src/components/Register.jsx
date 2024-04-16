@@ -30,7 +30,7 @@ function RegisterBox() {
       try {
         if (email && password && emailRegex.test(email)) {
           register(email, password)
-          navigate('/login');
+          navigate('/qr');
         }
       } catch (error) {
         

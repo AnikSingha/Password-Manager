@@ -36,7 +36,7 @@ function UserProvider({ children }) {
                     setSessionId(response.session_id);
                 }
             } catch (error) {
-                console.error(error);
+                
             }
         };
     
@@ -69,7 +69,7 @@ function UserProvider({ children }) {
             }
         } catch (error) {
             console.error('Registration failed:', error)
-            return false
+            throw error
         }
     }
 
