@@ -52,6 +52,11 @@ function Login() {
           margin="normal"
           fullWidth
           onChange={(e) => {setEmail(e.target.value)}}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              submit(e);
+            }
+          }}
           InputLabelProps={{
             style: { color: '#fff' },
           }}
@@ -67,6 +72,11 @@ function Login() {
           fullWidth
           type="password"
           onChange={(e) => {setPassword(e.target.value); setShowAlert(false)}}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              submit(e);
+            }
+          }}
           InputLabelProps={{
             style: { color: '#fff' },
           }}

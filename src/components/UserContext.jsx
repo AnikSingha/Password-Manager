@@ -9,7 +9,8 @@ async function makeRequest(url, method, body) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
+            credentials: 'include'
         })
 
         const data = await response.json()
@@ -42,23 +43,22 @@ function UserProvider({ children }) {
     const login = async (email, password) => {
 
         try {
-            const data = await makeRequest('http://174.138.49.160/auth/login', 'POST', { email, password })
+            const data = await makeRequest('https://pass.aniksingha.com/auth/login', 'POST', { email, password })
 
             if (data.success) {
-                setUserState({isLoggedIn: true, username: email})
+                console.log("check cookies")
+                console.log(document.cookie)
             } else {
-                console.error(data.message)
                 throw new Error(data.message)
             }
         } catch (error) {
-            console.error(error)
             throw error
         }
     }
 
     const register = async (email, password) => {
         try {
-            const data = await makeRequest('http://174.138.49.160/auth/register', 'POST', { email, password })
+            const data = await makeRequest(' http://127.0.0.1:5000/auth/register', 'POST', { email, password })
 
             if (data.success) {
                 return true

@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './components/Login';
 import Register from './components/Register';
 import OTP from './components/otp';
+import Test from './components/Test';
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                     <Route path="/otp" element={<OTP />} />
                     
                     <Route path="*" element={<Navigate to="/login" />} />
+                    <Route path='/test' element={<Test/>}/>
                 </Routes>
             </Router>
         </div>
