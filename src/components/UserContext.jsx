@@ -58,7 +58,7 @@ function UserProvider({ children }) {
 
     const register = async (email, password) => {
         try {
-            const data = await makeRequest(' http://127.0.0.1:5000/auth/register', 'POST', { email, password })
+            const data = await makeRequest('https://pass.aniksingha.com/auth/register', 'POST', { email, password })
 
             if (data.success) {
                 return true
@@ -74,7 +74,7 @@ function UserProvider({ children }) {
 
     const resetPassword = async (email, password) => {
         try {
-            const data = await makeRequest('http://174.138.49.160/auth/reset_password', 'POST', { email, password })
+            const data = await makeRequest('https://pass.aniksingha.com/auth/reset_password', 'POST', { email, password })
 
             if (data.success) {
                 return true
