@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "./UserContext";
+import OTP from "./otp";
 
 function DisplayQR() {
     const [imageSrc, setImageSrc] = useState('');
@@ -35,8 +36,11 @@ function DisplayQR() {
   
     return (
       <div>
+        <OTP/>
+        <br/>
         {imageSrc ? (
-          <img src={`data:image/png;base64,${imageSrc}`} alt="QR Code" />
+          <img src={`data:image/png;base64,${imageSrc}`} alt="QR Code" 
+            style={{ height: '400px', width: '400px' }} />
         ) : (
           <p>Loading QR code...</p>
         )}
