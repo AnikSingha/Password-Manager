@@ -1,9 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { UserContext, makeRequest } from "./UserContext";
 import OTP from "./otp";
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import { Grid, Typography, Box, Stack } from '@mui/material';
 
 function DisplayQR() {
   const [imageSrc, setImageSrc] = useState('');
@@ -32,22 +30,24 @@ function DisplayQR() {
 
 
   return (
-    <div>
-      <Typography variant="h6" style={{ fontWeight: 'bold', marginBottom: '20px' }}>
-        Please scan the QR code below in your Google Authenticator app and verify the code to add 2FA to your account
-      </Typography>
-      <Box display="flex" justifyContent="center">
-        {imageSrc ? (
-          <img src={`data:image/png;base64,${imageSrc}`} alt="QR Code" 
-            style={{ height: '400px', width: '400px' }} />
-        ) : (
-          <Typography>Loading QR code...</Typography>
-        )}
-      </Box>
-      <Box display="flex" justifyContent="center" marginTop="20px">
-        <OTP/>
-      </Box>
-    </div>
+    <Grid container justifyContent="center" alignItems="center" style={{ height: '100vh' }}>
+      <Stack>
+        <Typography variant="h6" style={{ fontWeight: 'bold', marginBottom: '20px' }}>
+          Please scan the QR code below in your Google Authenticator app and verify the code to add 2FA to your account
+        </Typography>
+        <Box display="flex" justifyContent="center">
+          {imageSrc ? (
+            <img src={`data:image/png;base64,${imageSrc}`} alt="QR Code" 
+              style={{ height: '400px', width: '400px' }} />
+          ) : (
+            <Typography>Loading QR code...</Typography>
+          )}
+        </Box>
+        <Box display="flex" justifyContent="center" marginTop="20px">
+          <OTP/>
+        </Box>
+      </Stack>
+    </Grid>
   );
 }
 
