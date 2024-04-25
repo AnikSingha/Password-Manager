@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { UserContext } from "./UserContext";
+import { UserContext, makeRequest } from "./UserContext";
 import OTP from "./otp";
 
 function DisplayQR() {
@@ -7,18 +7,10 @@ function DisplayQR() {
     const {user} = useContext(UserContext)
   
     useEffect(() => {
+      
       const fetchData = async () => {
         try {
-          const response = await fetch('http://localhost:5000/oauth/create_qr', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email: user })
-          });
-          const data = await response.json();
-  
-          console.log(data.message)
+          const data = await makeRequest('http://localhost:5000/oauth/create_qr', "POST", {email: user})
   
           if (data.success) {
             setImageSrc(data.image_data);
@@ -29,21 +21,23 @@ function DisplayQR() {
           console.error('Error fetching QR code:', error);
         }
       };
-  
-      fetchData();
-    }, []);
+      
+      if (user != '') {
+        fetchData()
+      }
+    }, [user]);
   
   
     return (
       <div>
-        <OTP/>
-        <br/>
         {imageSrc ? (
           <img src={`data:image/png;base64,${imageSrc}`} alt="QR Code" 
             style={{ height: '400px', width: '400px' }} />
         ) : (
           <p>Loading QR code...</p>
         )}
+        <br/><br/>
+        <OTP/>
       </div>
     );
   }

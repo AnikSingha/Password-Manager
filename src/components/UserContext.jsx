@@ -26,22 +26,26 @@ function UserProvider({ children }) {
     let [user, setUser] = useState("")
     let [sessionId, setSessionId] = useState("")
 
+    const getCookies = async () => {
+        try {
+            const response = await makeRequest('http://localhost:5000/auth/get_cookies', 'GET');
+
+            if (response.success) {
+                setUser(response.user);
+                setSessionId(response.session_id);
+            }
+        } catch (error) {
+            
+        }
+    }
+
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const response = await makeRequest('http://localhost:5000/auth/get_cookies', 'GET');
-    
-                if (response.success) {
-                    setUser(response.user);
-                    setSessionId(response.session_id);
-                }
-            } catch (error) {
-                
-            }
+            await getCookies()
         };
     
         fetchData();
-    }, [document.cookie, user, sessionId])
+    }, [])
 
     const login = async (email, password) => {
 
@@ -49,6 +53,7 @@ function UserProvider({ children }) {
             const data = await makeRequest('http://localhost:5000/auth/login', 'POST', { email, password })
 
             if (data.success) {
+                await getCookies()
             } else {
                 throw new Error(data.message)
             }
@@ -62,6 +67,7 @@ function UserProvider({ children }) {
             const data = await makeRequest('http://localhost:5000/auth/register', 'POST', { email, password })
 
             if (data.success) {
+                await getCookies()
                 return true
             } else {
                 console.error('Registration failed:', data.message)
@@ -102,7 +108,7 @@ function UserProvider({ children }) {
     }
 
     return (
-        <UserContext.Provider value={{ user, sessionId, login, register, resetPassword, logout}}>
+        <UserContext.Provider value={{ user, sessionId, login, register, resetPassword, logout, getCookies}}>
             {children}
         </UserContext.Provider>
     )

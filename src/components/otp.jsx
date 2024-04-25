@@ -1,61 +1,61 @@
-import './otp.css'
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
+import { useState, useContext, useRef } from 'react';
+import OtpInput from 'react18-input-otp';
+import { Container, Grid, Typography, Button } from '@mui/material';
+import { makeRequest } from './UserContext';
+import { UserContext } from './UserContext';
 
 function OTP() {
-  const navigate = useNavigate();
-  const enteredOTP = useRef('');
-  const [otp, setOTP] = useState(Array(5).fill(''));
-  const inputRefs = Array(5).fill(null).map(() => useRef(null));
 
-  const handleChange = (e, index) => {
-    const { value } = e.target;
-    // Regex for only allowing one number
-    if (/^\d{1}$/.test(value)) {
-      setOTP(prevOTP => {
-        const newOTP = [...prevOTP];
-        newOTP[index] = value;
-        return newOTP;
-      });
+  const [otp, setOtp] = useState('');
+  const [showError, setShowError] = useState(false);
+  const { user } = useContext(UserContext);
+  const otpInputRef = useRef(null);
 
-      // Move focus to the next input field if available
-      if (index < inputRefs.length - 1 && value !== '') {
-        inputRefs[index + 1].current.focus();
+  const handleChange = (enteredOtp) => {
+    setOtp(enteredOtp);
+    setShowError(false);
+  };
+
+  const handleSubmit = async () => {
+    if (otp.length !== 6) {
+      setShowError(true);
+      return;
+    }
+
+    try {
+      const data = await makeRequest('http://localhost:5000/oauth/verify_otp', 'POST', { email: user, code: otp });
+
+      if (data.success) {
+        console.log("OTP Correct");
+      } else {
+        console.log("OTP Incorrect");
+        setShowError(true);
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const handleVerifyOTP = () => {
-    enteredOTP.current = otp.join('');
-    console.log(enteredOTP.current);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleVerifyOTP();
-  }
-  
   return (
     <>
-      <h1>Password Manager</h1>
-      <div className="card">
-        <h2>Enter OTP</h2>
-        <form className="otp-container" onSubmit={handleSubmit}>
-          {otp.map((num, index) => (
-            <input 
-              key={index}
-              value={num}
-              ref={inputRefs[index]}
-              onChange={(e) => handleChange(e, index)}
-              className="input-field-otp"
-            />
-          ))}
-          <button type="submit" className="auth-btn">Verify OTP</button>
-        </form>
-      </div>
+          <Typography variant="h6" align="center">Enter OTP</Typography>
+          <OtpInput
+            ref={otpInputRef}
+            value={otp}
+            onChange={handleChange}
+            numInputs={6}
+            separator={<span>-</span>}
+            inputStyle={{ fontSize: '24px', width: '50px', height: '50px' }}
+            isInputNum={true}
+            hasErrored={showError}
+            errorStyle={{ color: '#FF6666' }}
+            onSubmit={handleSubmit}
+          />
+          <Button variant="contained" color="primary" onClick={handleSubmit}>
+            Submit
+          </Button>
     </>
-  )
+  );
 }
 
 export default OTP;
-
