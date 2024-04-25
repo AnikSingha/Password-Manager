@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Grid } from '@mui/material'; // Import Grid from Material-UI
 import Login from './components/Login';
 import Register from './components/Register';
-import Test from './components/Test';
 import DisplayQR from './components/displayQR';
 
 function App() {
@@ -13,9 +12,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path='/qr' element={<DisplayQR />} />
-
                     <Route path="*" element={<Navigate to="/login" />} />
-                    <Route path='/test' element={<Test/>}/>
                 </Routes>
             </Router>
         </Grid>

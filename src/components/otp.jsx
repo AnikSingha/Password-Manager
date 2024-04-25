@@ -5,7 +5,6 @@ import { makeRequest } from './UserContext';
 import { UserContext } from './UserContext';
 
 function OTP() {
-
   const [otp, setOtp] = useState('');
   const [showError, setShowError] = useState(false);
   const { user } = useContext(UserContext);
@@ -26,9 +25,9 @@ function OTP() {
       const data = await makeRequest('http://localhost:5000/oauth/verify_otp', 'POST', { email: user, code: otp });
 
       if (data.success) {
-        console.log("OTP Correct");
+        //write code to navigate to the dashboard
       } else {
-        console.log("OTP Incorrect");
+
         setShowError(true);
       }
     } catch (error) {
@@ -37,7 +36,14 @@ function OTP() {
   };
 
   return (
-    <>
+    <Container maxWidth="xs">
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          {showError && (
+            <Typography variant="h5" color="error" align="center" sx={{color: '#FF6666'}}>
+              The code entered was incorrect
+            </Typography>
+          )}
           <Typography variant="h6" align="center">Enter OTP</Typography>
           <OtpInput
             ref={otpInputRef}
@@ -45,16 +51,20 @@ function OTP() {
             onChange={handleChange}
             numInputs={6}
             separator={<span>-</span>}
-            inputStyle={{ fontSize: '24px', width: '50px', height: '50px' }}
+            inputStyle={{ fontSize: '24px', width: '55px', height: '50px' }}
             isInputNum={true}
             hasErrored={showError}
             errorStyle={{ color: '#FF6666' }}
             onSubmit={handleSubmit}
           />
+        </Grid>
+        <Grid item xs={12} textAlign="center">
           <Button variant="contained" color="primary" onClick={handleSubmit}>
             Submit
           </Button>
-    </>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
 
