@@ -25,27 +25,23 @@ function Login() {
 
   useEffect(() => {
     const fetchData = async () => {
-      let success = false
-
       try {
         await getCookies();
         const isValid = await validateSession();
-
+  
+        setLoading(false);
         if (isValid.success) {
-          success = true
+          navigate('/dashboard');
         }
       } catch (error) {
         console.log(error);
-      } finally {
         setLoading(false);
-        if (success) {
-          navigate('/dashboard')
-        }
       }
     };
-
-    fetchData()
+  
+    fetchData();
   }, [sessionId]);
+  
 
   if (loading) {
     return (
