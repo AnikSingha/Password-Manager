@@ -126,7 +126,7 @@ function UserProvider({ children }) {
             }
         } catch (error) {
             console.error(error)
-            return False
+            return false
         }
     }
 
