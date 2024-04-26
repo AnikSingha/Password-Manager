@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react"
+import { createContext, useEffect, useState} from "react"
 
 const UserContext = createContext()
 
@@ -23,8 +23,8 @@ async function makeRequest(url, method, body) {
 
 function UserProvider({ children }) {
 
-    let [user, setUser] = useState("")
-    let [sessionId, setSessionId] = useState("")
+    const [user, setUser] = useState("")
+    const [sessionId, setSessionId] = useState("")
 
     const getCookies = async () => {
         try {
@@ -45,7 +45,7 @@ function UserProvider({ children }) {
         };
     
         fetchData();
-    }, [])
+    }, [user, sessionId])
 
     const login = async (email, password) => {
 
@@ -54,6 +54,7 @@ function UserProvider({ children }) {
 
             if (data.success) {
                 await getCookies()
+            
             } else {
                 throw new Error(data.message)
             }
@@ -68,10 +69,9 @@ function UserProvider({ children }) {
 
             if (data.success) {
                 await getCookies()
-                return true
+               
             } else {
                 console.error('Registration failed:', data.message)
-                return false
             }
         } catch (error) {
             console.error('Registration failed:', error)
@@ -96,19 +96,42 @@ function UserProvider({ children }) {
     }
 
     const logout = async () => {
-
         try {
-            const data = await makeRequest('http://localhost:5000/delete_cookies')
+            const data = await makeRequest('http://localhost:5000/auth/delete_cookies', 'DELETE')
+
+            setUser('')
+            setSessionId('')
+
+            if (data.success) {
+                return true
+            } else {
+                return false
+            }
         } catch(error) {
             console.log(error)
-        }
+            return false
+        } 
+    }
 
-        setUser('')
-        setSessionId('')
+    const validateSession = async () => {
+        try {
+            const data = await makeRequest('http://localhost:5000/auth/verify_session', 'POST', {sessionId})
+
+            if (data.success) {
+                return true
+            }
+            else {
+                await makeRequest('http://localhost:5000/auth/delete_cookies', 'DELETE')
+                return false
+            }
+        } catch (error) {
+            console.error(error)
+            return False
+        }
     }
 
     return (
-        <UserContext.Provider value={{ user, sessionId, login, register, resetPassword, logout, getCookies}}>
+        <UserContext.Provider value={{ user, sessionId, login, register, resetPassword, logout, getCookies, validateSession}}>
             {children}
         </UserContext.Provider>
     )

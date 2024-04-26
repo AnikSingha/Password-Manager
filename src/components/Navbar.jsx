@@ -4,8 +4,27 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserContext } from './UserContext';
 
 function Navbar() {
+
+  const navigate = useNavigate()
+  const { logout } = useContext(UserContext)
+
+  const logoutOnClick = async () => {
+    try {
+      const result = await logout()
+
+      if (result) {
+        navigate('/login')
+      }
+    } catch(error) {
+      console.error(error)
+    }
+  }
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -26,7 +45,7 @@ function Navbar() {
             <Button sx={{ color: '#fff', fontSize: '0.95rem', marginLeft: "5px"}}>
               Profile
             </Button>
-            <Button sx={{ color: '#fff', fontSize: '0.95rem', marginLeft: "5px"}}>
+            <Button onClick={logoutOnClick} sx={{ color: '#fff', fontSize: '0.95rem', marginLeft: "5px"}}>
               Logout
             </Button>
           </Box>

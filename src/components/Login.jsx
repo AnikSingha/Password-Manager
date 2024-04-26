@@ -1,27 +1,55 @@
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Alert, Grid } from '@mui/material';
 import { UserContext } from './UserContext';
 
 function Login() {
-  
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
-  const [showAlert, setShowAlert] = useState()
-  const navigate = useNavigate()
-  const { login } = useContext(UserContext)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [loading, setLoading] = useState(true); // New loading state
+  const { login, validateSession, getCookies, sessionId } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const submit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      await login(email, password)
-      navigate('/register')
+      await login(email, password);
+      navigate('/dashboard');
     } catch (error) {
       setShowAlert(true);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await getCookies();
+        const isValid = await validateSession();
+
+        if (isValid) {
+          navigate('/dashboard');
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false); // Set loading to false when useEffect completes
+      }
+    };
+
+    fetchData()
+  }, [sessionId]);
+
+  // Render loading bar if loading
+  if (loading) {
+    return (
+      <Grid container justifyContent="center" alignItems="center" style={{ height: '100vh' }}>
+        <CircularProgress color="primary" size={60} />
+      </Grid>
+    );
+  }
 
   return (
     <Grid container justifyContent="center" alignItems="center" style={{ height: '100vh' }}>
@@ -40,11 +68,7 @@ function Login() {
         <Typography variant="h4" gutterBottom>
           Log In
         </Typography>
-        {showAlert && (
-            <Alert severity="error">
-              Incorrect email or password
-            </Alert>
-          )}
+        {showAlert && <Alert severity="error">Incorrect email or password</Alert>}
         <form>
           <TextField
             id="email"
@@ -52,7 +76,9 @@ function Login() {
             variant="filled"
             margin="normal"
             fullWidth
-            onChange={(e) => {setEmail(e.target.value)}}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 submit(e);
@@ -72,7 +98,10 @@ function Login() {
             margin="normal"
             fullWidth
             type="password"
-            onChange={(e) => {setPassword(e.target.value); setShowAlert(false)}}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setShowAlert(false);
+            }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 submit(e);
@@ -85,11 +114,14 @@ function Login() {
               style: { color: '#fff', backgroundColor: '#444654' },
             }}
           />
-          <Button variant="contained" fullWidth sx={{backgroundColor:"#343644", marginTop: "20px"}} onClick={submit}>
+          <Button variant="contained" fullWidth sx={{ backgroundColor: '#343644', marginTop: '20px' }} onClick={submit}>
             Submit
           </Button>
           <Typography variant="body1" gutterBottom sx={{ marginTop: '20px' }}>
-            Don't have an account? <a onClick={() => {navigate('/register')}} style={{ color: '#ADD8E6', cursor: 'pointer' }}>Sign Up</a>
+            Don't have an account?{' '}
+            <a onClick={() => navigate('/register')} style={{ color: '#ADD8E6', cursor: 'pointer' }}>
+              Sign Up
+            </a>
           </Typography>
         </form>
       </Box>
