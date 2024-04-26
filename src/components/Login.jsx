@@ -8,7 +8,7 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-  const [loading, setLoading] = useState(true); // New loading state
+  const [loading, setLoading] = useState(true);
   const { login, validateSession, getCookies, sessionId } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -35,14 +35,13 @@ function Login() {
       } catch (error) {
         console.log(error);
       } finally {
-        setLoading(false); // Set loading to false when useEffect completes
+        setLoading(false);
       }
     };
 
     fetchData()
   }, [sessionId]);
 
-  // Render loading bar if loading
   if (loading) {
     return (
       <Grid container justifyContent="center" alignItems="center" style={{ height: '100vh' }}>

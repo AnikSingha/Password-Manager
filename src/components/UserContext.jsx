@@ -130,8 +130,53 @@ function UserProvider({ children }) {
         }
     }
 
+    const addAccount = async(email, website, password) => {
+        try {
+            const data = await makeRequest("http://localhost:5000/password_management/add_account", "POST", {email, website, password})
+
+            if (data.success) { 
+                return true
+            } else {
+                return false
+            } 
+        } catch(error) {
+            console.error(error)
+            return false
+        }
+    }
+
+    const deleteAccount = async(email, website) => {
+        try {
+            const data = await makeRequest("http://localhost:5000/password_management/delete_account", "POST", {email, website})
+
+            if (data.success) { 
+                return true
+            } else {
+                return false
+            } 
+        } catch(error) {
+            console.error(error)
+            return false
+        }
+    }
+
+    const updatePassword = async(email, website, password) => {
+        try {
+            const data = await makeRequest("http://localhost:5000/password_management/update_password", "PUT", {email, website, new_password: password})
+
+            if (data.success) { 
+                return true
+            } else {
+                return false
+            } 
+        } catch(error) {
+            console.error(error)
+            return false
+        }
+    }
+
     return (
-        <UserContext.Provider value={{ user, sessionId, login, register, resetPassword, logout, getCookies, validateSession}}>
+        <UserContext.Provider value={{ user, sessionId, login, register, resetPassword, logout, getCookies, validateSession, addAccount, deleteAccount, updatePassword}}>
             {children}
         </UserContext.Provider>
     )
