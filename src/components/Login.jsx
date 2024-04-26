@@ -29,7 +29,7 @@ function Login() {
         await getCookies();
         const isValid = await validateSession();
 
-        if (isValid) {
+        if (isValid.success) {
           navigate('/dashboard');
         }
       } catch (error) {
