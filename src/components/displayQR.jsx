@@ -11,7 +11,7 @@ function DisplayQR() {
   
     const fetchData = async () => {
       try {
-        const data = await makeRequest('http://localhost:5000/oauth/create_qr', "POST", {email: user})
+        const data = await makeRequest('https://pass.aniksingha.com/oauth/create_qr', "POST", {email: user})
 
         if (data.success) {
           setImageSrc(data.image_data);

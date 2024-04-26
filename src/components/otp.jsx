@@ -24,7 +24,7 @@ function OTP() {
     }
 
     try {
-      const data = await makeRequest('http://localhost:5000/oauth/verify_otp', 'POST', { email: user, code: otp });
+      const data = await makeRequest('https://pass.aniksingha.com/oauth/verify_otp', 'POST', { email: user, code: otp });
 
       if (data.success) {
         navigate('/dashboard')

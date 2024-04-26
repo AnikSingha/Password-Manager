@@ -28,7 +28,7 @@ function UserProvider({ children }) {
 
     const getCookies = async () => {
         try {
-            const response = await makeRequest('http://localhost:5000/auth/get_cookies', 'GET');
+            const response = await makeRequest('https://pass.aniksingha.com/auth/get_cookies', 'GET');
 
             if (response.success) {
                 setUser(response.user);
@@ -50,7 +50,7 @@ function UserProvider({ children }) {
     const login = async (email, password) => {
 
         try {
-            const data = await makeRequest('http://localhost:5000/auth/login', 'POST', { email, password })
+            const data = await makeRequest('https://pass.aniksingha.com/auth/login', 'POST', { email, password })
 
             if (data.success) {
                 await getCookies()
@@ -65,7 +65,7 @@ function UserProvider({ children }) {
 
     const register = async (email, password) => {
         try {
-            const data = await makeRequest('http://localhost:5000/auth/register', 'POST', { email, password })
+            const data = await makeRequest('https://pass.aniksingha.com/auth/register', 'POST', { email, password })
 
             if (data.success) {
                 await getCookies()
@@ -81,7 +81,7 @@ function UserProvider({ children }) {
 
     const resetPassword = async (email, password) => {
         try {
-            const data = await makeRequest('http://localhost:5000/auth/reset_password', 'POST', { email, password })
+            const data = await makeRequest('https://pass.aniksingha.com/auth/reset_password', 'POST', { email, password })
 
             if (data.success) {
                 return true
@@ -97,7 +97,7 @@ function UserProvider({ children }) {
 
     const logout = async () => {
         try {
-            const data = await makeRequest('http://localhost:5000/auth/delete_cookies', 'DELETE')
+            const data = await makeRequest('https://pass.aniksingha.com/auth/delete_cookies', 'DELETE')
 
             setUser('')
             setSessionId('')
@@ -115,13 +115,13 @@ function UserProvider({ children }) {
 
     const validateSession = async () => {
         try {
-            const data = await makeRequest('http://localhost:5000/auth/verify_session', 'POST', {sessionId})
+            const data = await makeRequest('https://pass.aniksingha.com/auth/verify_session', 'POST', {sessionId})
 
             if (data.success) {
                 return true
             }
             else {
-                await makeRequest('http://localhost:5000/auth/delete_cookies', 'DELETE')
+                await makeRequest('https://pass.aniksingha.com/auth/delete_cookies', 'DELETE')
                 return false
             }
         } catch (error) {
@@ -132,7 +132,7 @@ function UserProvider({ children }) {
 
     const addAccount = async(email, website, password) => {
         try {
-            const data = await makeRequest("http://localhost:5000/password_management/add_account", "POST", {email, website, password})
+            const data = await makeRequest("https://pass.aniksingha.com/password_management/add_account", "POST", {email, website, password})
 
             if (data.success) { 
                 return true
@@ -147,7 +147,7 @@ function UserProvider({ children }) {
 
     const deleteAccount = async(email, website) => {
         try {
-            const data = await makeRequest("http://localhost:5000/password_management/delete_account", "POST", {email, website})
+            const data = await makeRequest("https://pass.aniksingha.com/password_management/delete_account", "POST", {email, website})
 
             if (data.success) { 
                 return true
@@ -162,7 +162,7 @@ function UserProvider({ children }) {
 
     const updatePassword = async(email, website, password) => {
         try {
-            const data = await makeRequest("http://localhost:5000/password_management/update_password", "PUT", {email, website, new_password: password})
+            const data = await makeRequest("https://pass.aniksingha.com/password_management/update_password", "PUT", {email, website, new_password: password})
 
             if (data.success) { 
                 return true

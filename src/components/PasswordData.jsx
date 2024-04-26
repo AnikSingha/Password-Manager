@@ -75,7 +75,7 @@ export default function PasswordData() {
     const fetchData = async () => {
       try {
         if (user !== "") {
-          const response = await makeRequest('http://localhost:5000/password_management/get_accounts', 'POST', { email: user });
+          const response = await makeRequest('https://pass.aniksingha.com/password_management/get_accounts', 'POST', { email: user });
 
           if (response.success && Object.keys(response.message).length > 0) {
             const messageArray = [];
