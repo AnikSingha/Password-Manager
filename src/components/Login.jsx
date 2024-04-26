@@ -30,6 +30,7 @@ function Login() {
         const isValid = await validateSession();
   
         setLoading(false);
+        console.log(isValid)
         if (isValid) {
           navigate('/dashboard');
         }
